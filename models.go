@@ -25,7 +25,7 @@ type SpendRequest struct {
 	Points int `json:"points"`
 }
 
-type SpendResponse struct {
+type SpendRecord struct {
 	Payer  string `json:"payer"`
 	Points int    `json:"points"`
 }

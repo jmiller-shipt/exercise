@@ -10,27 +10,36 @@ func removeFromBalance(payer string, amount int) {
 	balanceLedger[payer] = balanceLedger[payer] - amount
 }
 
-func spendPoints(spendAmount int) []SpendResponse {
+func spendPoints(spendAmount int) []SpendRecord {
+	// Sort transactions from oldest to newest
 	sort.Slice(transactions, func(i, j int) bool {
 		return transactions[i].Timestamp.Before(transactions[j].Timestamp)
 	})
 
-	m := make(map[string]int)
-	var spendReport []SpendResponse
+	// Initialize map to record spend amounts
+	amountsSpent := make(map[string]int)
+
+	var spendReport []SpendRecord
+
+	// Iterate through transactions
 	for _, transaction := range transactions {
+
+		// if remaining spend amount is less
+		// than current transactions points
 		if spendAmount > transaction.Points {
 			spendAmount = spendAmount - transaction.Points
 			removeFromBalance(transaction.Payer, transaction.Points)
-			m[transaction.Payer] = m[transaction.Payer] - transaction.Points
-		} else {
+			amountsSpent[transaction.Payer] = amountsSpent[transaction.Payer] - transaction.Points
+		} else { // remove only the remaining spend amount
 			removeFromBalance(transaction.Payer, spendAmount)
-			m[transaction.Payer] = m[transaction.Payer] - spendAmount
+			amountsSpent[transaction.Payer] = amountsSpent[transaction.Payer] - spendAmount
 			break
 		}
 	}
 
-	for k, v := range m {
-		temp := SpendResponse{Payer: k, Points: v}
+	// Condense amounts spent to payer
+	for k, v := range amountsSpent {
+		temp := SpendRecord{Payer: k, Points: v}
 		spendReport = append(spendReport, temp)
 	}
 
@@ -40,9 +49,11 @@ func spendPoints(spendAmount int) []SpendResponse {
 func getBalances() []Balance {
 	var balances []Balance
 
+	// Convert map to Balance structs
 	for k, v := range balanceLedger {
 		temp := Balance{Payer: k, Points: v}
 		balances = append(balances, temp)
 	}
+
 	return balances
 }

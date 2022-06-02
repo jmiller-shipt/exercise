@@ -20,7 +20,9 @@ func main() {
 
 func add(w http.ResponseWriter, r *http.Request) {
 	rawBody, err := ioutil.ReadAll(r.Body)
+
 	var transaction Transaction
+
 	if err = json.Unmarshal(rawBody, &transaction); err != nil {
 		sendResponse(422, AddResponse{}, "Unprocessable entity", w)
 	} else {
@@ -33,7 +35,9 @@ func add(w http.ResponseWriter, r *http.Request) {
 
 func spend(w http.ResponseWriter, r *http.Request) {
 	rawBody, err := ioutil.ReadAll(r.Body)
+
 	var spendRequest SpendRequest
+
 	if err = json.Unmarshal(rawBody, &spendRequest); err != nil {
 		sendResponse(422, nil, "Unprocessable entity", w)
 	} else {
@@ -50,14 +54,18 @@ func balances(w http.ResponseWriter, r *http.Request) {
 func sendResponse(status int, i interface{}, message string, w http.ResponseWriter) {
 	response := Response{}
 	response.Message = message
+
 	if status >= 400 {
 		response.Success = false
 	} else {
 		response.Success = true
 	}
+
+	response.Data = i
+
 	w.WriteHeader(status)
 	w.Header().Set("Content-Type", "application/json")
-	response.Data = i
+
 	marshalledBody, _ := ffjson.Marshal(response)
 	w.Write(marshalledBody)
 }
