@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/pquerna/ffjson/ffjson"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/pquerna/ffjson/ffjson"
 )
 
 func main() {
@@ -15,7 +17,10 @@ func main() {
 	r.HandleFunc("/spend", spend).Methods("POST")
 	r.HandleFunc("/balances", balances).Methods("GET")
 
-	http.ListenAndServe(":80", r)
+	err := http.ListenAndServe(":80", r)
+	if err != nil {
+		fmt.Print("Could not start web server")
+	}
 }
 
 func add(w http.ResponseWriter, r *http.Request) {
