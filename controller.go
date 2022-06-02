@@ -24,7 +24,7 @@ func add(w http.ResponseWriter, r *http.Request) {
 	var transaction Transaction
 
 	if err = json.Unmarshal(rawBody, &transaction); err != nil {
-		sendResponse(422, AddResponse{}, "Unprocessable entity", w)
+		sendResponse(422, nil, "Unprocessable entity", w)
 	} else {
 		transactions = append(transactions, transaction)
 		addToBalance(transaction.Payer, transaction.Points)
@@ -55,6 +55,7 @@ func sendResponse(status int, i interface{}, message string, w http.ResponseWrit
 	response := Response{}
 	response.Message = message
 
+	// if error status code
 	if status >= 400 {
 		response.Success = false
 	} else {
