@@ -7,10 +7,6 @@ type Balance struct {
 	Points int    `json:"points"`
 }
 
-type ErrorResponse struct {
-	Message string `json:"message"`
-}
-
 type Response struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
