@@ -2,6 +2,13 @@
 
 ## Installation
 
+### Checkout code
+```
+git clone https://github.com/jmiller-shipt/exercise.git
+```
+
+### Install Go
+
 Install the Go programming language and toolset: [golang.org](https://golang.org/doc/install)
 
 You can verify you've installed correctly by running:
@@ -12,6 +19,11 @@ go version
 For this exercise I used version `1.17`
 
 ## Build
+Make sure you are in the `exercise` directory
+
+```
+cd exercise
+```
 
 You must build the application prior to running:
 ```
@@ -50,10 +62,10 @@ Data constraints
 Data example
 ```json
 {
-  "user_id": "32435435",
-  "payer" : "ACME",
-  "points" : 400,
-  "timestamp": "2022-04-07T10:00:00Z"
+  "user_id": "4958309",
+  "payer" : "DANNON",
+  "points" : 300,
+  "timestamp": "2020-10-31T10:00:00Z"
 }
 ```
 
@@ -63,7 +75,7 @@ Example call
 curl --location --request POST 'http://localhost:80/add' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "user_id": "2343242",
+    "user_id": "4958309",
     "payer": "DANNON",
     "points": 300,
     "timestamp": "2020-10-31T10:00:00Z"
@@ -72,7 +84,7 @@ curl --location --request POST 'http://localhost:80/add' \
 
 Example success response
 ```json
-{"success":true,"message":"Successfully added transaction","data":{"user_id":"2343242","payer":"DANNON"}}
+{"success":true,"message":"Successfully added transaction","data":{"user_id":"4958309","payer":"DANNON"}}
 ```
 
 Example failure response
@@ -101,7 +113,7 @@ Data example
 ```json
 {
   "user_id" : "4958309",
-  "points" : 400
+  "points" : 5000
 }
 ```
 
@@ -110,12 +122,12 @@ Example call
 ```shell
 curl --location --request POST 'http://localhost:80/spend' \
 --header 'Content-Type: application/json' \
---data-raw '{ "points": 5000 }'
+--data-raw '{ "user_id": "4958309", "points": 5000 }'
 ```
 
 Example success response
 ```json
-{"success":true,"message":"Balances after point spend","data":[{"payer":"DANNON","points":-900}]}
+{"success":true,"message":"Points spent by payer for user","data":{"user_id":"4958309","spend_records":[{"payer":"DANNON","points":-100},{"payer":"UNILEVER","points":-200},{"payer":"MILLER COORS","points":-4700}]}}
 ```
 
 Example failure response
@@ -134,12 +146,12 @@ Method: `GET`
 Example call
 
 ```shell
-curl --location --request GET 'http://localhost:80/balances/2324235'
+curl --location --request GET 'http://localhost:80/balances/4958309'
 ```
 
 Example success response
 ```json
-{"success":true,"message":"Current payer balances","data":[{"payer":"DANNON","points":900,"user_id":"2324235"}]}
+{"success":true,"message":"Current payer balances","data":[{"payer":"DANNON","points":900,"user_id":"4958309"}]}
 ```
 
 Example failure response
