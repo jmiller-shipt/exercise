@@ -46,8 +46,9 @@ func spend(w http.ResponseWriter, r *http.Request) {
 	if err = json.Unmarshal(rawBody, &spendRequest); err != nil {
 		sendResponse(422, nil, "Unprocessable entity", w)
 	} else {
-		spendResponse := spendPoints(spendRequest.Points)
-		sendResponse(200, spendResponse, "Points spent by payer", w)
+		spendRecords := spendPoints(spendRequest.Points)
+		spendResponse := SpendResponse{Records: spendRecords, UserId: spendRequest.UserId}
+		sendResponse(200, spendResponse, "Points spent by payer for user", w)
 	}
 }
 

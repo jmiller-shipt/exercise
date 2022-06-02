@@ -20,12 +20,18 @@ type AddResponse struct {
 }
 
 type SpendRequest struct {
-	Points int `json:"points"`
+	UserId string `json:"user_id"`
+	Points int    `json:"points"`
 }
 
 type SpendRecord struct {
 	Payer  string `json:"payer"`
 	Points int    `json:"points"`
+}
+
+type SpendResponse struct {
+	UserId  string        `json:"user_id"`
+	Records []SpendRecord `json:"spend_records"`
 }
 
 type Transaction struct {
