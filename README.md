@@ -9,6 +9,8 @@ You can verify you've installed correctly by running:
 go version
 ```
 
+For this exercise I used version `1.17`
+
 ## Build
 
 You must build the application prior to running:
