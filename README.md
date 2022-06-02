@@ -40,6 +40,7 @@ Data constraints
 
 ```json
 {
+  "user_id" : "[string - valid user id]",
   "payer" : "[string - payer name]",
   "points" : "[int - amount of points]",
   "timestamp": "[timestamp - valid timestamp]"
@@ -49,6 +50,7 @@ Data constraints
 Data example
 ```json
 {
+  "user_id": "32435435",
   "payer" : "ACME",
   "points" : 400,
   "timestamp": "2022-04-07T10:00:00Z"
@@ -60,7 +62,22 @@ Example call
 ```shell
 curl --location --request POST 'http://localhost:80/add' \
 --header 'Content-Type: application/json' \
---data-raw '{ "payer": "DANNON", "points": 300, "timestamp": "2020-10-31T10:00:00Z" }'
+--data-raw '{
+    "user_id": "2343242",
+    "payer": "DANNON",
+    "points": 300,
+    "timestamp": "2020-10-31T10:00:00Z"
+}'
+```
+
+Example success response
+```json
+{"success":true,"message":"Successfully added transaction","data":{"user_id":"2343242","payer":"DANNON"}}
+```
+
+Example failure response
+```json
+{"success":false,"message":"Unprocessable entity","data":null}
 ```
 
 ## Spend
@@ -96,16 +113,36 @@ curl --location --request POST 'http://localhost:80/spend' \
 --data-raw '{ "points": 5000 }'
 ```
 
+Example success response
+```json
+{"success":true,"message":"Balances after point spend","data":[{"payer":"DANNON","points":-900}]}
+```
+
+Example failure response
+```json
+{"success":false,"message":"Unprocessable entity","data":null}
+```
+
 ## Balances
 
 Used to spend points.
 
-URL: `/balances`
+URL: `/balances/{userId}`
 
 Method: `GET`
 
 Example call
 
 ```shell
-curl --location --request GET 'http://localhost:80/balances'
+curl --location --request GET 'http://localhost:80/balances/2324235'
+```
+
+Example success response
+```json
+{"success":true,"message":"Current payer balances","data":[{"payer":"DANNON","points":900,"user_id":"2324235"}]}
+```
+
+Example failure response
+```json
+{"success":false,"message":"Unprocessable entity","data":null}
 ```

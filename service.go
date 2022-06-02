@@ -46,12 +46,12 @@ func spendPoints(spendAmount int) []SpendRecord {
 	return spendReport
 }
 
-func getBalances() []Balance {
+func getBalances(userId string) []Balance {
 	var balances []Balance
 
 	// Convert map to Balance structs
-	for k, v := range balanceLedger {
-		temp := Balance{Payer: k, Points: v}
+	for payer, points := range balanceLedger {
+		temp := Balance{Payer: payer, Points: points, UserId: userId}
 		balances = append(balances, temp)
 	}
 

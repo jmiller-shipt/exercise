@@ -5,6 +5,7 @@ import "time"
 type Balance struct {
 	Payer  string `json:"payer"`
 	Points int    `json:"points"`
+	UserId string `json:"user_id"`
 }
 
 type Response struct {
@@ -14,7 +15,8 @@ type Response struct {
 }
 
 type AddResponse struct {
-	Payer string `json:"retailer"`
+	UserId string `json:"user_id"`
+	Payer  string `json:"payer"`
 }
 
 type SpendRequest struct {
@@ -27,6 +29,7 @@ type SpendRecord struct {
 }
 
 type Transaction struct {
+	UserId    string    `json:"user_id"`
 	Payer     string    `json:"payer"`
 	Points    int       `json:"points"`
 	Timestamp time.Time `json:"timestamp"`

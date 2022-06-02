@@ -15,7 +15,7 @@ func main() {
 
 	r.HandleFunc("/add", add).Methods("POST")
 	r.HandleFunc("/spend", spend).Methods("POST")
-	r.HandleFunc("/balances", balances).Methods("GET")
+	r.HandleFunc("/balances/{userId}", balances).Methods("GET")
 
 	err := http.ListenAndServe(":80", r)
 	if err != nil {
@@ -33,7 +33,7 @@ func add(w http.ResponseWriter, r *http.Request) {
 	} else {
 		transactions = append(transactions, transaction)
 		addToBalance(transaction.Payer, transaction.Points)
-		body := AddResponse{Payer: transaction.Payer}
+		body := AddResponse{Payer: transaction.Payer, UserId: transaction.UserId}
 		sendResponse(201, body, "Successfully added transaction", w)
 	}
 }
@@ -46,13 +46,14 @@ func spend(w http.ResponseWriter, r *http.Request) {
 	if err = json.Unmarshal(rawBody, &spendRequest); err != nil {
 		sendResponse(422, nil, "Unprocessable entity", w)
 	} else {
-		spendReport := spendPoints(spendRequest.Points)
-		sendResponse(200, spendReport, "Balances after point spend", w)
+		spendResponse := spendPoints(spendRequest.Points)
+		sendResponse(200, spendResponse, "Points spent by payer", w)
 	}
 }
 
 func balances(w http.ResponseWriter, r *http.Request) {
-	balances := getBalances()
+	userId, _ := mux.Vars(r)["userId"]
+	balances := getBalances(userId)
 	sendResponse(200, balances, "Current payer balances", w)
 }
 
