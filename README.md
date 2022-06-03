@@ -21,7 +21,7 @@ For this exercise I used version `1.17`
 ## Build
 Make sure you are in the `exercise` directory
 
-```
+```shell
 cd exercise
 ```
 
@@ -36,7 +36,7 @@ This will result in the executable file `exercise`
 
 Run the application with the following command:
 
-```
+```shell
 ./exercise
 ```
 
@@ -157,4 +157,13 @@ Example success response
 Example failure response
 ```json
 {"success":false,"message":"Unprocessable entity","data":null}
+```
+
+## Tests
+
+To run tests, run the following in the root directory of the project:
+
+*Note: make sure the project has been built*
+```
+go test
 ```
